@@ -53,9 +53,9 @@ def _save_config(jira_url, username, password, error_reporting):
         url = urlparse.urlparse(resp.url)
         jira_url = url.scheme + "://" + url.netloc
     except IOError, e:
-        print "It doesn't appear that {0} is responding to a request.\
+        print ("It doesn't appear that {0} is responding to a request.\
                Please make sure that you typed the hostname, \
-               i.e. jira.atlassian.com.\n{1}".format(jira_url, e)
+               i.e. jira.atlassian.com.\n{1}".format(jira_url, e))
         sys.exit(1)
 
     config.set('jira', 'url', jira_url)

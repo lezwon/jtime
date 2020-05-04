@@ -25,9 +25,9 @@ class JIRA(jira.client.JIRA):
                 return issue
             except jira.exceptions.JIRAError as ex:
                 if ex.status_code == 404:
-                    print "No JIRA issue found for branch %s" % branch
+                    print ("No JIRA issue found for branch %s" % branch)
                 else:
-                    print str(ex)
+                    print (str(ex))
 
     def get_worklog(self, issue):
         """
@@ -71,10 +71,10 @@ class JIRA(jira.client.JIRA):
             if transition['to']['name'] == status_name:
                 transition_id = transition['id']
                 self.transition_issue(issue, transition_id)
-                print "Changed status of issue %s to %s" % (issue.key, status_name)
+                print ("Changed status of issue %s to %s" % (issue.key, status_name))
                 return True
 
-        print "Unable to change status of issue %s to %s" % (issue.key, status_name)
+        print ("Unable to change status of issue %s to %s" % (issue.key, status_name))
 
     def get_datetime_issue_in_progress(self, issue):
         """

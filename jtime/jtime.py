@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import argh
 import argparse
-import ConfigParser
+import configparser
 import dateutil.parser
 from dateutil.tz import tzlocal
 import datetime
@@ -67,7 +67,7 @@ def status():
 
     # Print the title
     title = issue.fields.summary
-    print "(%s) %s" % (branch, title)
+    print ("(%s) %s" % (branch, title))
 
     # Print the status
     status = issue.fields.status.name
@@ -76,11 +76,11 @@ def status():
 
     if in_progress:
         in_progress_string = in_progress.strftime("%a %x %I:%M %p")
-        print '  Status: %s as of %s' % (status, in_progress_string)
+        print ('  Status: %s as of %s' % (status, in_progress_string))
     else:
-        print '  Status: %s' % status
+        print ('  Status: %s' % status)
 
-    print '  Assignee: %s' % assignee
+    print ('  Assignee: %s' % assignee)
 
     # Print the worklogs
 
@@ -92,7 +92,7 @@ def status():
         pass
 
     worklogs = jira.get_worklog(issue)
-    print "\nTime logged (%s):" % time_spent
+    print ("\nTime logged (%s):" % time_spent)
     if worklogs:
         for worklog in worklogs:
             worklog_hash = worklog.raw
@@ -109,24 +109,24 @@ def status():
             comment = worklog_hash.get('comment', '<no comment>')
 
             updated_string = created.strftime(created_pattern)
-            print "  %s - %s (%s): %s" % (updated_string, author, time_spent, comment)
+            print( "  %s - %s (%s): %s" % (updated_string, author, time_spent, comment))
     else:
-        print "  No worklogs"
+        print ("  No worklogs")
 
     cycle_time = jira.get_cycle_time(issue)
     if cycle_time:
-        print '\nCycle Time: %.1f days' % cycle_time
+        print ('\nCycle Time: %.1f days' % cycle_time)
 
     # Print the time elapsed since the last mark
     elapsed_time = jira.get_elapsed_time(issue)
     if elapsed_time:
-        print '\n\033[0;32m%s elapsed\033[00m (use "jtime log ." to log elapsed time or "jtime log <duration> (ex. 30m, 1h etc.)" to log a specific amount of time)' % (elapsed_time)
+        print ('\n\033[0;32m%s elapsed\033[00m (use "jtime log ." to log elapsed time or "jtime log <duration> (ex. 30m, 1h etc.)" to log a specific amount of time)' % (elapsed_time))
     else:
-        print '\n\033[0;32m0m elapsed\033[00m'
+        print ('\n\033[0;32m0m elapsed\033[00m')
 
 
 def lmts():
-    print git.get_last_modified_timestamp()
+    print (git.get_last_modified_timestamp())
 
 
 @argh.arg('duration', help='Use . to log all time elapsed since the last mark or provide a specific amount of time to log (ex. 30m, 1h)')
@@ -154,9 +154,9 @@ def log(duration, message=None, use_last_commit_message=False):
             jira.add_worklog(issue, timeSpent=duration, adjustEstimate=None, newEstimate=None, reduceBy=None,
                              comment=comment)
 
-            print "Logged %s against issue %s (%s)" % (duration, branch, comment)
+            print ("Logged %s against issue %s (%s)" % (duration, branch, comment))
         else:
-            print "No time logged, less than 0m elapsed."
+            print( "No time logged, less than 0m elapsed.")
 
 
 def mark():
@@ -174,17 +174,17 @@ def mark():
         # If we have worklogs, change the updated time of the last log to the mark
         marked = jira.touch_last_worklog(issue)
         mark_time = datetime.datetime.now(dateutil.tz.tzlocal()).strftime("%I:%M %p")
-        print "Set mark at %s on %s by touching last work log" % (mark_time, branch)
+        print ("Set mark at %s on %s by touching last work log" % (mark_time, branch))
     else:
         # If we don't have worklogs, mark the issue as in progress if that is an available transition
         jira.workflow_transition(issue, 'Open')
         marked = jira.workflow_transition(issue, 'In Progress')
         mark_time = datetime.datetime.now(dateutil.tz.tzlocal()).strftime("%I:%M %p")
-        print 'Set mark at %s on %s by changing status to "In Progress"' % (mark_time, branch)
+        print ('Set mark at %s on %s by changing status to "In Progress"' % (mark_time, branch))
 
     if not marked:
-        print "ERROR: Issue %s is has a status of %s and has no worklogs.  You must log some time or re-open the issue to proceed." % \
-            (branch, issue.fields.status.name)
+        print ("ERROR: Issue %s is has a status of %s and has no worklogs.  You must log some time or re-open the issue to proceed." % \
+            (branch, issue.fields.status.name))
 
 
 @argh.arg('-a', '--show-all', help='Include all issues that are not Closed')
@@ -239,18 +239,18 @@ def me(show_all=False, show_inprogress=False, show_open=False, quiet=False):
 
         cycletime = jira.get_cycle_time(result.key)
         cycletime_str = " -- %.1f days" % cycletime if cycletime else ""
-        print "%s (%s) %s%s" % (issue, updated, status, cycletime_str)
+        print ("%s (%s) %s%s" % (issue, updated, status, cycletime_str))
 
         # If verbose, add a line for the issue title
         if not quiet:
             title = result.fields.summary
             title = (title[:75] + '..') if len(title) > 75 else title
-            print "  %s\n" % title
+            print ("  %s\n" % title)
 
     # Print result count and usage hint for help
-    print "\033[0;32m%s issue(s) found\033[00m (use 'jtime me -h' for filter options)" % len(results)
+    print( "\033[0;32m%s issue(s) found\033[00m (use 'jtime me -h' for filter options)" % len(results))
 
-    print "One week avg cycle time: %.1f days" % jira.get_week_avg_cycletime()
+    print ("One week avg cycle time: %.1f days" % jira.get_week_avg_cycletime())
 
 
 def reopen():

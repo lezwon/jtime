@@ -9,7 +9,7 @@ class GIT(git.Repo):
         try:
             super(GIT, self).__init__(**kwargs)
         except InvalidGitRepositoryError:
-            print "You must be in a git repository to use jtime"
+            print ("You must be in a git repository to use jtime")
             sys.exit(1)
 
     @property
@@ -24,7 +24,7 @@ class GIT(git.Repo):
         try:
             branch = self.active_branch
         except InvalidGitRepositoryError:
-            print "Not in a git repo"
+            print ("Not in a git repo")
         return branch
 
     def get_last_commit_message(self):
@@ -38,7 +38,7 @@ class GIT(git.Repo):
             branch = self.active_branch
             return self.commit(branch).message
         except InvalidGitRepositoryError:
-            print "Not in a git repo"
+            print ("Not in a git repo")
             return None
 
     def get_last_modified_timestamp(self):
@@ -48,4 +48,4 @@ class GIT(git.Repo):
         cmd = "find . -print0 | xargs -0 stat -f '%T@ %p' | sort -n | tail -1 | cut -f2- -d' '"
         ps = subprocess.Popen(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
         output = ps.communicate()[0]
-        print output
+        print( output)
