@@ -2,7 +2,8 @@ import jira
 import datetime
 import dateutil.parser
 
-import utils
+import jtime.utils
+import jtime.custom_exceptions
 
 
 class JIRA(jira.client.JIRA):

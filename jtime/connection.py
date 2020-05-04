@@ -1,8 +1,8 @@
 import base64
 import requests
 
-import configuration
-import jira_ext
+import jtime.configuration
+import jtime.jira_ext
 
 
 # Global to re-use opened JIRA connection

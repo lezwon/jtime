@@ -5,7 +5,7 @@ import sys
 import urllib
 import urllib.parse
 
-import custom_exceptions
+import jtime.custom_exceptions
 
 
 _config = os.path.expanduser('~/.jtime.ini')

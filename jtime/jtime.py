@@ -14,11 +14,11 @@ import os
 import sys
 import types
 
-import configuration
-import connection
-import custom_exceptions
-import git_ext
-import utils
+import jtime.configuration
+import jtime.connection
+import jtime.custom_exceptions
+import jtime.git_ext
+import jtime.utils
 
 
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.ERROR)
