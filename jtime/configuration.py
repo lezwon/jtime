@@ -1,9 +1,9 @@
 import base64
-import ConfigParser
+import configparser
 import os
 import sys
 import urllib
-import urlparse
+import urllib.parse
 
 import custom_exceptions
 
@@ -52,7 +52,7 @@ def _save_config(jira_url, username, password, error_reporting):
         resp = urllib.urlopen(jira_url)
         url = urlparse.urlparse(resp.url)
         jira_url = url.scheme + "://" + url.netloc
-    except IOError, e:
+    except IOError as e:
         print ("It doesn't appear that {0} is responding to a request.\
                Please make sure that you typed the hostname, \
                i.e. jira.atlassian.com.\n{1}".format(jira_url, e))
@@ -64,7 +64,7 @@ def _save_config(jira_url, username, password, error_reporting):
     config.set('jira', 'error_reporting', str(error_reporting))
 
     with open(_config, 'w') as ini:
-        os.chmod(_config, 0600)
+        os.chmod(_config, 0o0600)
         config.write(ini)
 
 
@@ -99,7 +99,7 @@ def _save_cookie(cookie_name, cookie_value):
         config.write(ini)
 
 
-class MyParser(ConfigParser.SafeConfigParser):
+class MyParser(configparser.SafeConfigParser):
     def as_dict(self):
         d = dict(self._sections)
         for k in d:
