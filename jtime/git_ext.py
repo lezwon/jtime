@@ -1,14 +1,14 @@
 import sys
 import subprocess
 import git
-from git.errors import InvalidGitRepositoryError
+import git
 
 
 class GIT(git.Repo):
     def __init__(self, **kwargs):
         try:
             super(GIT, self).__init__(**kwargs)
-        except InvalidGitRepositoryError:
+        except git.InvalidGitRepositoryError:
             print ("You must be in a git repository to use jtime")
             sys.exit(1)
 
@@ -23,7 +23,7 @@ class GIT(git.Repo):
         # Check if we are currently in a repo
         try:
             branch = self.active_branch
-        except InvalidGitRepositoryError:
+        except git.InvalidGitRepositoryError:
             print ("Not in a git repo")
         return branch
 
