@@ -267,7 +267,7 @@ def main():
     """
     try:
         init()
-    except custom_exceptions.NotConfigured:
+    except jtime.custom_exceptions.NotConfigured:
         configure()
         init()
     # Adding this in case users are trying to run without adding a jira url.
